@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "Node",
+		"outDir": "dist"
+	},
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"display": "Recommended"
+}
