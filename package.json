@@ -21,6 +21,7 @@
 	"dependencies": {
 		"@types/node": "^16.10.9",
 		"axios": "^0.23.0",
+		"googleapis": "^88.2.0",
 		"typescript": "^4.4.4"
 	}
 }

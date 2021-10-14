@@ -36,5 +36,6 @@ async function main() {
 	console.log(markets);
 
 }
+import "./sheets"
 
 main().then(() => console.log("done"));
