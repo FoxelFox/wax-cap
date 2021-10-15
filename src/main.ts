@@ -1,6 +1,9 @@
 import axios from "axios";
 import {Deal, Market} from "./interfaces";
 import * as fs from "fs";
+import {sheets_v4} from "googleapis";
+import Sheets = sheets_v4.Sheets;
+import {SheetsService} from "./sheets";
 
 async function getMarkets(): Promise<Market[]> {
 	const res = await axios.get(`https://wax.alcor.exchange/api/markets`);
@@ -35,7 +38,11 @@ async function main() {
 
 	console.log(markets);
 
+	const sheet = new SheetsService();
+
+	await sheet.login();
+	await sheet.get();
 }
-import "./sheets"
+
 
 main().then(() => console.log("done"));
