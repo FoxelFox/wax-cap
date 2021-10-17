@@ -4,9 +4,12 @@ export interface Symbol {
 }
 
 export interface Token {
-	contract: string,
-	symbol: Symbol,
+	contract: string
+	symbol: Symbol
 	str: string
+	supply?: number
+	maxSupply?: number
+	isuser?: string
 }
 
 export interface Market {
@@ -24,6 +27,19 @@ export interface Market {
 	change24: number // %
 	changeWeek: number // %
 	deals?: Deal[]
+	orders?: {
+		buy: Order[],
+		sell: Order[]
+	}
+}
+
+export interface Order {
+	account: string
+	ask: string
+	bid: string
+	id: number
+	timestamp: number
+	unit_price: string // this is a Integer String
 }
 
 export interface Deal {
