@@ -1,6 +1,6 @@
 import {Market} from "./interfaces";
 
-export function getTable(markets: Market[]) {
+export function getMarketCapTable(markets: Market[]) {
 	const waxMarkets = filterBy(markets, "WAX");
 	let table: any[] = [];
 	let i = 3;

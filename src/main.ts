@@ -2,9 +2,11 @@ import axios from "axios";
 import {Deal, Market, Order, Token} from "./interfaces";
 import * as fs from "fs";
 import {SetFormat, SheetsService} from "./sheets";
-import {getTable} from "./market-cap";
+import {getMarketCapTable} from "./market-cap";
+import {getBacklogTable} from "./backlog";
 
 async function getMarkets(): Promise<Market[]> {
+	console.log("Start Fetching Markets")
 	const res = await axios.get(`https://wax.alcor.exchange/api/markets`);
 	return res.data as Market[];
 }
@@ -64,7 +66,9 @@ async function getFullMarketInfo(): Promise<Market[]> {
 
 	for (const market of markets) {
 		//market.deals = await getDeals(market.id);
+		console.log(`Get Orders for ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
 		market.orders = await getOrders(market.id);
+		console.log(`Get Supply for ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
 		await getSupply(market.quote_token);
 
 		console.log(`Fetched ${market.orders.buy.length + market.orders.sell.length} orders from ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
@@ -76,7 +80,8 @@ async function getFullMarketInfo(): Promise<Market[]> {
 async function main() {
 	let markets;
 
-	if (fs.existsSync("markets.json")) {
+	if (fs.existsSync("markets.json") && !isCacheOutdated()) {
+		console.log("Using Cached Market Data")
 		markets = JSON.parse(fs.readFileSync("markets.json").toString());
 	} else {
 		markets = await getFullMarketInfo();
@@ -86,11 +91,14 @@ async function main() {
 	const sheet = new SheetsService('1pj0JhhZDKtGFPI-ST8WsdNqnZ47vtVleHd1RBtrJGpE');
 
 	await sheet.login();
-	const table = getTable(markets);
 
-	await sheet.set('index!A3', table, SetFormat.User);
+	await sheet.set('backlog!A1', getBacklogTable(markets, 'dknra.wam'), SetFormat.User);
+	await sheet.set('index!A3', getMarketCapTable(markets), SetFormat.User);
 
 }
 
+function isCacheOutdated(): boolean {
+	return Date.now() - new Date(fs.statSync("markets.json").mtime).getTime() > 1000 * 60 * 5 // 5 minutes
+}
 
 main().then(() => console.log("done"));
