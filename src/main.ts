@@ -66,9 +66,7 @@ async function getFullMarketInfo(): Promise<Market[]> {
 
 	for (const market of markets) {
 		//market.deals = await getDeals(market.id);
-		console.log(`Get Orders for ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
 		market.orders = await getOrders(market.id);
-		console.log(`Get Supply for ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
 		await getSupply(market.quote_token);
 
 		console.log(`Fetched ${market.orders.buy.length + market.orders.sell.length} orders from ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
@@ -92,13 +90,13 @@ async function main() {
 
 	await sheet.login();
 
-	await sheet.set('backlog!A1', getBacklogTable(markets, 'dknra.wam'), SetFormat.User);
-	await sheet.set('index!A3', getMarketCapTable(markets), SetFormat.User);
+	//await sheet.set('backlog!A1', getBacklogTable(JSON.parse(JSON.stringify(markets)), 'dknra.wam'), SetFormat.User);
+	await sheet.set('index!A3', getMarketCapTable(JSON.parse(JSON.stringify(markets))), SetFormat.User);
 
 }
 
 function isCacheOutdated(): boolean {
-	return Date.now() - new Date(fs.statSync("markets.json").mtime).getTime() > 1000 * 60 * 5 // 5 minutes
+	return Date.now() - new Date(fs.statSync("markets.json").mtime).getTime() > 1000 * 60 * 60 // 1h
 }
 
 main().then(() => console.log("done"));
