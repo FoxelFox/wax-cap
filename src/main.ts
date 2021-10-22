@@ -99,4 +99,7 @@ function isCacheOutdated(): boolean {
 	return Date.now() - new Date(fs.statSync("markets.json").mtime).getTime() > 1000 * 60 * 60 // 1h
 }
 
-main().then(() => console.log("done"));
+setInterval(async () => {
+	await main();
+}, 1000 * 60 * 60)
+
