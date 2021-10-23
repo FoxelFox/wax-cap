@@ -85,21 +85,40 @@ async function main() {
 		markets = await getFullMarketInfo();
 		fs.writeFileSync("markets.json", JSON.stringify(markets, undefined, '\t'))
 	}
-
 	const sheet = new SheetsService('1pj0JhhZDKtGFPI-ST8WsdNqnZ47vtVleHd1RBtrJGpE');
 
 	await sheet.login();
-
 	//await sheet.set('backlog!A1', getBacklogTable(JSON.parse(JSON.stringify(markets)), 'dknra.wam'), SetFormat.User);
-	await sheet.set('index!A3', getMarketCapTable(JSON.parse(JSON.stringify(markets))), SetFormat.User);
-
+	sheet.set('index!A3', getMarketCapTable(JSON.parse(JSON.stringify(markets))), SetFormat.User).then((o) => {
+		console.log(o, "Updated Sheet");
+	}).catch((e) => {
+		console.log("Sheet update failed", e);
+	});
 }
 
 function isCacheOutdated(): boolean {
-	return Date.now() - new Date(fs.statSync("markets.json").mtime).getTime() > 1000 * 60 * 60 // 1h
+	return Date.now() - new Date(fs.statSync("markets.json").mtime).getTime() > 1000 * 60 * 5
 }
 
-setInterval(async () => {
-	await main();
-}, 1000 * 60 * 60)
 
+let inProgress = false;
+async function loop() {
+	console.log("loop");
+	try {
+		if (!inProgress) {
+			inProgress = true
+			console.log(`Starting ${new Date().toISOString()}`)
+			await main();
+			console.log(`Done ${new Date().toISOString()}`)
+			inProgress = false
+		}
+	} catch (e) {
+		console.log("Error")
+		console.log(e);
+		inProgress = false;
+	}
+
+}
+
+setInterval(loop, 1000 * 60 * 10)
+loop();
