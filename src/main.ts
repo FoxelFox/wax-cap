@@ -5,6 +5,8 @@ import {SetFormat, SheetsService} from "./sheets";
 import {getMarketCapTable} from "./market-cap";
 import {getBacklogTable} from "./backlog";
 
+let waxToken: Token
+
 async function getMarkets(): Promise<Market[]> {
 	console.log("Start Fetching Markets")
 	const res = await axios.get(`https://wax.alcor.exchange/api/markets`);
@@ -75,6 +77,11 @@ async function getFullMarketInfo(): Promise<Market[]> {
 		}
 	}
 
+	// find wax
+	waxToken = markets.find(e => e.base_token.symbol.name === "WAX")!.base_token;
+	await getSupply(waxToken);
+
+
 	return markets;
 }
 
@@ -94,12 +101,22 @@ async function main() {
 	const sheet = new SheetsService('1pj0JhhZDKtGFPI-ST8WsdNqnZ47vtVleHd1RBtrJGpE');
 	await sheet.login();
 
+
+	// WAX PRICE
 	sheet.set('index!B2', [[waxPrice]], SetFormat.User).then((o) => {
-		console.log(o, "Updated WAX Price Sheet");
+		console.log(o, "Updated WAX Price");
 	}).catch((e) => {
 		console.log("Sheet update failed", e);
 	});
 
+	// WAX SUPPLY
+	sheet.set('index!D2', [[waxToken.supply]], SetFormat.User).then((o) => {
+		console.log(o, "Updated WAX Supply");
+	}).catch((e) => {
+		console.log("Sheet update failed", e);
+	});
+
+	// TOKENS
 	sheet.set('index!A3', getMarketCapTable(JSON.parse(JSON.stringify(markets))), SetFormat.User).then((o) => {
 		console.log(o, "Updated Sheet");
 	}).catch((e) => {
