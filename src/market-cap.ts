@@ -1,11 +1,11 @@
 import {Market} from "./interfaces";
 
 export function getMarketCapTable(markets: Market[]) {
-	const waxMarkets = filterBy(markets, "WAX");
+	let waxMarkets = filterBy(markets, "WAX");
 	let table: any[] = [];
 	let i = 3;
 
-
+	waxMarkets = waxMarkets.sort((a, b) => b.id - a.id);
 
 	for (const m of waxMarkets) {
 		const bid = getBid(m);
