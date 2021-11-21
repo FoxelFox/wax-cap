@@ -88,10 +88,18 @@ async function main() {
 		markets = await getFullMarketInfo();
 		fs.writeFileSync("markets.json", JSON.stringify(markets, undefined, '\t'))
 	}
-	const sheet = new SheetsService('1pj0JhhZDKtGFPI-ST8WsdNqnZ47vtVleHd1RBtrJGpE');
 
+	const waxPrice = await getWAXPrice();
+
+	const sheet = new SheetsService('1pj0JhhZDKtGFPI-ST8WsdNqnZ47vtVleHd1RBtrJGpE');
 	await sheet.login();
-	//await sheet.set('backlog!A1', getBacklogTable(JSON.parse(JSON.stringify(markets)), 'dknra.wam'), SetFormat.User);
+
+	sheet.set('index!B2', [waxPrice], SetFormat.User).then((o) => {
+		console.log(o, "Updated WAX Price Sheet");
+	}).catch((e) => {
+		console.log("Sheet update failed", e);
+	});
+
 	sheet.set('index!A3', getMarketCapTable(JSON.parse(JSON.stringify(markets))), SetFormat.User).then((o) => {
 		console.log(o, "Updated Sheet");
 	}).catch((e) => {
@@ -101,6 +109,13 @@ async function main() {
 
 function isCacheOutdated(): boolean {
 	return Date.now() - new Date(fs.statSync("markets.json").mtime).getTime() > 1000 * 60 * 5
+}
+
+async function getWAXPrice(): Promise<number> {
+	const res = await axios.get<{wax: {usd: number}}>(
+		"https://api.coingecko.com/api/v3/simple/price?ids=wax&vs_currencies=usd"
+	);
+	return res.data.wax.usd;
 }
 
 
