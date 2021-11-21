@@ -66,10 +66,13 @@ async function getFullMarketInfo(): Promise<Market[]> {
 
 	for (const market of markets) {
 		//market.deals = await getDeals(market.id);
-		market.orders = await getOrders(market.id);
-		await getSupply(market.quote_token);
-
-		console.log(`Fetched ${market.orders.buy.length + market.orders.sell.length} orders from ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
+		try {
+			market.orders = await getOrders(market.id);
+			await getSupply(market.quote_token);
+			console.log(`Fetched ${market.orders.buy.length + market.orders.sell.length} orders from ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
+		} catch (e) {
+			markets.splice(markets.findIndex(m => m.id === market.id), 1);
+		}
 	}
 
 	return markets;
