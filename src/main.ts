@@ -94,7 +94,7 @@ async function main() {
 	const sheet = new SheetsService('1pj0JhhZDKtGFPI-ST8WsdNqnZ47vtVleHd1RBtrJGpE');
 	await sheet.login();
 
-	sheet.set('index!B2', [waxPrice], SetFormat.User).then((o) => {
+	sheet.set('index!B2', [[waxPrice]], SetFormat.User).then((o) => {
 		console.log(o, "Updated WAX Price Sheet");
 	}).catch((e) => {
 		console.log("Sheet update failed", e);
