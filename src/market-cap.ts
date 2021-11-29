@@ -14,7 +14,7 @@ export function getMarketCapTable(markets: Market[]) {
 
 
 		if (bid > 0 && m.quote_token.supply! > 0) {
-			table.push([m.quote_token.symbol.name, `=C${i}*$B$2`, bid, m.quote_token.supply, m.quote_token.maxSupply, `=B${i}*D${i}`, `=B${i}*E${i}`, spread, m.volume24]);
+			table.push([m.quote_token.symbol.name, `=C${i}*$B$2`, bid, m.quote_token.supply, m.quote_token.maxSupply, `=B${i}*D${i}`, `=B${i}*E${i}`, spread === Infinity ? '' : spread, m.volume24]);
 			i++;
 		}
 	}
