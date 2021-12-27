@@ -10,6 +10,7 @@ let waxToken: Token
 async function getMarkets(): Promise<Market[]> {
 	console.log("Start Fetching Markets")
 	const res = await axios.get(`https://wax.alcor.exchange/api/markets`);
+	console.log("jo")
 	return res.data as Market[];
 }
 
@@ -52,9 +53,8 @@ async function getSupply(token: Token) {
 		}
 	});
 
-
 	// eg ["fhfri.wam", "0.71939557"]
-	const topHolders = await axios.get<any[]>(`https://www.api.bloks.io/wax/tokens?type=topHolders&chain=wax&contract=${token.contract}&symbol=${token.symbol.name}&limit=500`, {
+	const topHolders = await axios.get<any[]>(`https://www.api.bloks.io/wax/tokens?type=topHolders&chain=wax&contract=${token.contract}&symbol=${token.symbol.name}&limit=10`, {
 		data: {
 			type: "topHolders",
 			chain: "wax",
@@ -66,6 +66,7 @@ async function getSupply(token: Token) {
 
 	const blacklist = [token.contract]
 	let blacklistedSupply = 0;
+	console.log("test")
 	for (const holder of topHolders.data) {
 		if (blacklist.indexOf(holder[0]) !== -1) {
 			blacklistedSupply += parseFloat(holder[1])
