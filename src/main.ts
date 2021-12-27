@@ -52,8 +52,29 @@ async function getSupply(token: Token) {
 		}
 	});
 
+
+	// eg ["fhfri.wam", "0.71939557"]
+	const topHolders = await axios.get<any[]>(`https://www.api.bloks.io/wax/tokens?type=topHolders&chain=wax&contract=${token.contract}&symbol=${token.symbol.name}&limit=500`, {
+		data: {
+			type: "topHolders",
+			chain: "wax",
+			contract: token.contract,
+			symbol: token.symbol.name,
+			limit: 10
+		}
+	});
+
+	const blacklist = [token.contract]
+	let blacklistedSupply = 0;
+	for (const holder of topHolders.data) {
+		if (blacklist.indexOf(holder[0]) !== -1) {
+			blacklistedSupply += parseFloat(holder[0])
+		}
+	}
+
+
 	const stats = supply.data[token.symbol.name];
-	token.supply = parseInt(stats.supply.split(" ")[0]);
+	token.supply = parseInt(stats.supply.split(" ")[0]) - blacklistedSupply;
 	token.maxSupply = parseInt(stats.max_supply.split(" ")[0]);
 	token.isuser = stats.isuser;
 }
