@@ -68,7 +68,7 @@ async function getSupply(token: Token) {
 	let blacklistedSupply = 0;
 	for (const holder of topHolders.data) {
 		if (blacklist.indexOf(holder[0]) !== -1) {
-			blacklistedSupply += parseFloat(holder[0])
+			blacklistedSupply += parseFloat(holder[1])
 		}
 	}
 
