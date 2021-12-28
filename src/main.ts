@@ -7,6 +7,11 @@ import {getBacklogTable} from "./backlog";
 
 let waxToken: Token
 
+const SUPPLY_BLACKLIST = [
+	"terraminingx",
+	"farmersworld"
+];
+
 async function getMarkets(): Promise<Market[]> {
 	console.log("Start Fetching Markets")
 	const res = await axios.get(`https://wax.alcor.exchange/api/markets`);
@@ -65,6 +70,19 @@ async function getSupply(token: Token) {
 	token.supply = parseInt(stats.supply.split(" ")[0]) - blacklistedSupply;
 	token.maxSupply = parseInt(stats.max_supply.split(" ")[0]);
 	token.isuser = stats.isuser;
+
+	// apply supply blacklist
+	for (const contract of SUPPLY_BLACKLIST) {
+		const balance = await axios.post<string[]>("https://wax.greymass.com/v1/chain/get_currency_balance", {
+			code: token.contract,
+			account: contract,
+			symbol: token.symbol.name
+		})
+		if (balance.data[0]) {
+			token.supply -= parseFloat(balance.data[0].split(" ")[0]);
+		}
+	}
+
 }
 
 async function getDeals(id: number): Promise<Deal[]> {
