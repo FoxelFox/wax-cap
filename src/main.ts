@@ -53,26 +53,13 @@ async function getSupply(token: Token) {
 		}
 	});
 
-	// eg ["fhfri.wam", "0.71939557"]
-	const topHolders = await axios.get<any[]>(`https://www.api.bloks.io/wax/tokens?type=topHolders&chain=wax&contract=${token.contract}&symbol=${token.symbol.name}&limit=10`, {
-		data: {
-			type: "topHolders",
-			chain: "wax",
-			contract: token.contract,
-			symbol: token.symbol.name,
-			limit: 10
-		}
-	});
+	const contractBalance = await axios.post<string[]>("https://wax.greymass.com/v1/chain/get_currency_balance", {
+		code: token.contract,
+		account: token.contract,
+		symbol: token.symbol.name
+	})
 
-	const blacklist = [token.contract]
-	let blacklistedSupply = 0;
-	console.log("test")
-	for (const holder of topHolders.data) {
-		if (blacklist.indexOf(holder[0]) !== -1) {
-			blacklistedSupply += parseFloat(holder[1])
-		}
-	}
-
+	let blacklistedSupply = parseFloat(contractBalance.data[0].split(" ")[0]);
 
 	const stats = supply.data[token.symbol.name];
 	token.supply = parseInt(stats.supply.split(" ")[0]) - blacklistedSupply;
