@@ -13,11 +13,11 @@ export function getMarketCapTable(markets: Market[]) {
 		const spread = getSpread(bid, ask);
 
 
-		if (bid > 0 && m.quote_token.supply! > 0) {
+		//if (bid > 0 && m.quote_token.supply! > 0) {
 			const link = `=HYPERLINK("https://wax.alcor.exchange/trade/${m.quote_token.symbol.name.toLowerCase()}-${m.quote_token.contract}_${m.base_token.symbol.name.toLowerCase()}-${m.base_token.contract}"; "${m.quote_token.symbol.name}")`
 			table.push([link, `=C${i}*$B$2`, bid, m.quote_token.supply, m.quote_token.maxSupply, `=B${i}*D${i}`, `=B${i}*E${i}`, spread === Infinity ? '' : spread, m.volume24]);
 			i++;
-		}
+		//}
 	}
 
 	return table;
