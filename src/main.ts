@@ -15,7 +15,6 @@ const SUPPLY_BLACKLIST = [
 	"realmstorage",
 	"realmdevelop",
 	"defiminingio",
-	"defiminingtk",
 	"thenumberone",
 	"clashdomewld",
 	"fgltokenfdr1",
@@ -40,7 +39,24 @@ const SUPPLY_BLACKLIST = [
 	"treas.mars",
 	"colonizemars",
 	"bank.mars",
-	"team.mars"
+	"team.mars",
+	"farmersfunds",
+	"wareplaygame",
+	"prospectorsp",
+	"prospectorsd",
+	"prospectorsa",
+	"prospectorss",
+	"prospectorsc",
+	"prospectorsn",
+	"prospectorsu",
+	"roulettespin",
+	"prospectorsq",
+	"openbrmwaxio",
+	"nft.cow",
+	"dustdevelops",
+	"team.dust",
+	"minorprophet",
+	"dustoperator"
 ];
 
 async function getMarkets(): Promise<Market[]> {
