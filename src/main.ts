@@ -7,9 +7,40 @@ import {getBacklogTable} from "./backlog";
 
 let waxToken: Token
 
+// usually game master contracts
 const SUPPLY_BLACKLIST = [
 	"terraminingx",
-	"farmersworld"
+	"farmersworld",
+	"myradungame1",
+	"realmstorage",
+	"realmdevelop",
+	"defiminingio",
+	"defiminingtk",
+	"thenumberone",
+	"clashdomewld",
+	"fgltokenfdr1",
+	"fgltokenfdr2",
+	"fgltokensell",
+	"dragonvalley",
+	"dragonburner",
+	"nrg.gm",
+	"nrglocked.gm",
+	"teatokens.gm",
+	"swampdeposit",
+	"swampsshbank",
+	"spacecraftxc",
+	"spacecraftxf",
+	"arenaofglory",
+	"xpansiongame",
+	"xpansionswap",
+	"neftyblocksp",
+	"unapologetic",
+	"midgardclash",
+	"midgardtrade",
+	"treas.mars",
+	"colonizemars",
+	"bank.mars",
+	"team.mars"
 ];
 
 async function getMarkets(): Promise<Market[]> {
