@@ -64,7 +64,7 @@ async function getSupply(token: Token) {
 		symbol: token.symbol.name
 	})
 
-	let blacklistedSupply = parseFloat(contractBalance.data[0].split(" ")[0]);
+	let blacklistedSupply = contractBalance.data[0] ? parseFloat(contractBalance.data[0].split(" ")[0]) : 0;
 
 	const stats = supply.data[token.symbol.name];
 	token.supply = parseInt(stats.supply.split(" ")[0]) - blacklistedSupply;
@@ -100,6 +100,7 @@ async function getFullMarketInfo(): Promise<Market[]> {
 			await getSupply(market.quote_token);
 			console.log(`Fetched ${market.orders.buy.length + market.orders.sell.length} orders from ${market.quote_token.symbol.name} / ${market.base_token.symbol.name}`)
 		} catch (e) {
+			console.log(e)
 			markets.splice(markets.findIndex(m => m.id === market.id), 1);
 		}
 	}
