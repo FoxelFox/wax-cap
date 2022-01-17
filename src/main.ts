@@ -49,6 +49,7 @@ const SUPPLY_BLACKLIST = [
 	"team.mars",
 	"farmersfunds",
 	"wareplaygame",
+	"koq",
 	"prospectorsp",
 	"prospectorsd",
 	"prospectorsa",
@@ -68,7 +69,19 @@ const SUPPLY_BLACKLIST = [
 	"officeteamio",
 	"officemarket",
 	"officeadvise",
-	"officestrate"
+	"officestrate",
+	"other.worlds",
+	"ghub.worlds",
+	"team.worlds",
+	"voiduniverse",
+	"voidportingx",
+	"gameairdrops",
+	"onessusdrops",
+	"whenstakingx",
+	"hodlgodpools",
+	"wareplaymint",
+	"martianworld",
+	"hiddengemsxx"
 ];
 
 async function getMarkets(): Promise<Market[]> {
