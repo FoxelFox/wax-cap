@@ -81,7 +81,10 @@ const SUPPLY_BLACKLIST = [
 	"hodlgodpools",
 	"wareplaymint",
 	"martianworld",
-	"hiddengemsxx"
+	"hiddengemsxx",
+	"eosio.stake",
+	"genesis.wax",
+	"fndtn.worlds"
 ];
 
 async function getMarkets(): Promise<Market[]> {
