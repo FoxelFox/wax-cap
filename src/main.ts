@@ -84,6 +84,8 @@ const SUPPLY_BLACKLIST = [
 	"hiddengemsxx"
 ];
 
+let blackListBalances = {}
+
 async function getMarkets(): Promise<Market[]> {
 	console.log("Start Fetching Markets")
 	const res = await axios.get(`https://wax.alcor.exchange/api/markets`);
@@ -145,11 +147,18 @@ async function getSupply(token: Token) {
 
 	// apply supply blacklist
 	for (const contract of SUPPLY_BLACKLIST) {
-		const balance = await axios.post<string[]>("https://wax.greymass.com/v1/chain/get_currency_balance", {
-			code: token.contract,
-			account: contract,
-			symbol: token.symbol.name
-		})
+		let balance;
+		if (blackListBalances[contract]) {
+			balance = blackListBalances[contract]
+		} else {
+			balance = await axios.post<string[]>("https://wax.greymass.com/v1/chain/get_currency_balance", {
+				code: token.contract,
+				account: contract,
+				symbol: token.symbol.name
+			})
+			blackListBalances[contract] = balance;
+		}
+
 		if (balance.data[0]) {
 			token.supply -= parseFloat(balance.data[0].split(" ")[0]);
 		}
@@ -187,6 +196,7 @@ async function getFullMarketInfo(): Promise<Market[]> {
 
 async function main() {
 	let markets;
+	blackListBalances = {};
 
 	if (fs.existsSync("markets.json") && !isCacheOutdated()) {
 		console.log("Using Cached Market Data")
