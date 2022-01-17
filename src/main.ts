@@ -33,11 +33,18 @@ const SUPPLY_BLACKLIST = [
 	"xpansiongame",
 	"xpansionswap",
 	"neftyblocksp",
+	"mkting.nefty",
+	"reward.nefty",
+	"claim.nefty",
+	"stake.nefty",
 	"unapologetic",
 	"midgardclash",
 	"midgardtrade",
 	"treas.mars",
 	"colonizemars",
+	"farmingstake",
+	"farminggames",
+	"farmingtales",
 	"bank.mars",
 	"team.mars",
 	"farmersfunds",
@@ -56,7 +63,12 @@ const SUPPLY_BLACKLIST = [
 	"dustdevelops",
 	"team.dust",
 	"minorprophet",
-	"dustoperator"
+	"dustoperator",
+	"officegameio",
+	"officeteamio",
+	"officemarket",
+	"officeadvise",
+	"officestrate"
 ];
 
 async function getMarkets(): Promise<Market[]> {
